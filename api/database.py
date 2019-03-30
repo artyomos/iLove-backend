@@ -5,7 +5,9 @@ import random, string
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from flask import jsonify
+from flask import jsonify, Flask
+
+app = Flask(__name__)
 
 class NoInput(Exception):
     pass
@@ -19,6 +21,7 @@ firebase_admin.initialize_app(cred, {
 db = firestore.client()
 
 #Problem: Users with same name will cause overwrite of data.
+@app.route("/api/user")
 def addUser(name):
     """
     Add User
@@ -27,7 +30,7 @@ def addUser(name):
     key = doc_ref.id
 
     print("Created Reference for user: {0} [Key: {1}]".format(name, key))
-    
+
     data = {
         u'name': name,
         u'creation_date': time(),
@@ -40,6 +43,7 @@ def addUser(name):
     }
     return jsonify(package)
 
+@app.route("/api/user")
 def main(requests):
     if requests:
         json = requests.get_json()
@@ -54,3 +58,10 @@ def main(requests):
     else:
         #TODO make status code response instead
         raise NoInput("Header was Empty in Request")
+
+#Test Function
+def test():
+    with app.app_context():
+        addUser("OwO")
+
+test()
