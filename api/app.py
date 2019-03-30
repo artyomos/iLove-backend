@@ -1,57 +1,36 @@
 #Database test
 
-from time import time
-import random, string
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-from flask import jsonify, Flask
+from flask import Flask
+
+from user import create
 
 app = Flask(__name__)
 
 class NoInput(Exception):
     pass
 
-# Use the application default credentials
-cred = credentials.ApplicationDefault()
-firebase_admin.initialize_app(cred, {
-  'projectId': 'lahacks-2019',
-})
+@app.route("/")
+def hewwo():
+    return 'Hewwo! ^w^'
 
-db = firestore.client()
+@app.route("/login")
+def login():
+    pass
 
-#Problem: Users with same name will cause overwrite of data.
-@app.route("/api/user")
-def addUser(name):
-    """
-    Add User
-    """
-    doc_ref = db.collection(u'users').document()
-    key = doc_ref.id
+@app.route("/user/<user_id>")
+def show_user(user_id):
+    pass
 
-    print("Created Reference for user: {0} [Key: {1}]".format(name, key))
 
-    data = {
-        u'name': name,
-        u'creation_date': time(),
-        u'user_likes': {}
-    }
-    doc_ref.set(data)
-
-    package = {
-        "id" : key
-    }
-    return jsonify(package)
-
-@app.route("/api/user")
-def main(requests):
+@app.route("/api/user/create")
+def create_user(requests):
     if requests:
         json = requests.get_json()
         if 'name' in json:
             name = json['name']
             if name:
                 print("DEBUG: Processing Request")
-                return addUser()
+                return create.addUser()
             else:
                 #TODO make status code response instead
                 raise NoInput("Name was Empty in Request")
@@ -62,6 +41,6 @@ def main(requests):
 #Test Function
 def test():
     with app.app_context():
-        addUser("OwO")
+        create.addUser("OwO")
 
 test()
