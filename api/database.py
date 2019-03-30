@@ -1,6 +1,6 @@
 #Database test
 
-
+from time import time
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -18,12 +18,16 @@ def addUser(name):
     """
     Add User/Change data in User Class
     """
-    doc_ref = db.collection(u'users')
+    doc_ref = db.collection(u'users').document()
+    key = doc_ref.id
     data = {
         u'name': name,
+        u'creation_date': time(),
         u'user_likes': {}
     }
-    request = doc_ref.add(data)
+    print("Created Reference for user: {0} [Key: {1}]".format(name, key))
+    request = doc_ref.set(data)
+    return key
 
 addUser('Apple')
 def main(requests):
@@ -32,10 +36,4 @@ def main(requests):
         json = requests.get_json()
         if 'name' in json:
             print("DEBUG: Processing Request")
-            addUser(json['name'])
-
-    users_ref = db.collection(u'users')
-    docs = users_ref.get()
-
-    for doc in docs:
-        print(u'{} => {}'.format(doc.id, doc.to_dict()))
+            return addUser(json['name'])
