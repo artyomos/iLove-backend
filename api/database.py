@@ -9,3 +9,6 @@ firebase_admin.initialize_app(cred, {
 })
 
 db = firestore.client()
+
+# Toggle True to see debug statements
+DEBUG = False

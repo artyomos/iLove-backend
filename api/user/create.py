@@ -11,7 +11,7 @@ def addUser(name):
     doc_ref = database.db.collection(u'users').document()
     key = doc_ref.id
 
-    print("Created Reference for user: {0} [Key: {1}]".format(name, key))
+    if database.DEBUG: print("Created Reference for user: {0} [Key: {1}]".format(name, key))
 
     data = {
         u'name': name,
@@ -21,6 +21,7 @@ def addUser(name):
     doc_ref.set(data)
 
     package = {
+        "debug" : "Created Reference for user: {0}".format(name),
         "id" : key
     }
     return jsonify(package)

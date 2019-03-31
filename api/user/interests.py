@@ -23,7 +23,7 @@ def add_interest(args):
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
-    print("DEBUG: Previous Interests are {0}".format(previous_interests))
+    if database.DEBUG: print("DEBUG: Previous Interests are {0}".format(previous_interests))
 
     # Add new interest
     #TODO Add values/specifics
@@ -31,10 +31,11 @@ def add_interest(args):
 
     doc_ref.set(data)
 
-    print("DEBUG: New Interests are {0}".format(previous_interests))
+    if database.DEBUG: print("DEBUG: New Interests are {0}".format(previous_interests))
 
     # If reached this point, all was successful
     package = {
+        'interests': previous_interests,
         'success':True
     }
     return jsonify(package)
@@ -50,17 +51,18 @@ def remove_interest(args):
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
-    print("DEBUG: Previous Interests are {0}".format(previous_interests))
+    if database.DEBUG: print("DEBUG: Previous Interests are {0}".format(previous_interests))
 
     # Remove Interest
     del previous_interests[args['interest']['name']]
 
     doc_ref.update(data)
 
-    print("DEBUG: New Interests are {0}".format(previous_interests))
+    if database.DEBUG: print("DEBUG: New Interests are {0}".format(previous_interests))
 
     # If reached this point, all was successful
     package = {
+        'interests': previous_interests,
         'success':True
     }
     return jsonify(package)
