@@ -1,9 +1,11 @@
 # Main Application File
 import main
+import csv
 
 # Functions Needed to be Tested
 from user import create, interests
 from flask import jsonify
+import random
 
 def check_value(test_name, expected_value, received_value):
     try:
@@ -31,8 +33,46 @@ def increment(result):
 
 ### Flask Testing Function ###
 
+# Note: Run Old_Test for verifiable results
+def test(max_tests=0):
+    with main.app.app_context():
+        print("Executing Extraneous Tests ({0} Total!!)\nNote that Interests can be duplicate!".format(max_tests))
 
-def test():
+        # List of possible interests for the sample dummies
+        with open('hobbies.csv') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            possible_interests = csv_reader.__next__()
+
+        # List of possible names (First name only)
+        with open('names.csv') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            possible_names = csv_reader.__next__()
+
+        # Old Interests
+        #possible_interests = ['animal watching', 'doggos', 'cats', 'sergals', 'dolphins', 'Apple Inc.', 'Google', 'Python', 'C++', 'Java', 'Art', 'Cinematography', 'Programming', 'Death']
+        # Old Names
+        #possible_names = ['Jeremiah', 'Dereck', 'Adam', 'Steve', 'Susan', 'Oreo', 'Andy', 'Artyom', 'Jessie', 'Alex', 'Jonathan', 'Kevin', 'Majira']
+
+        for i in range(max_tests):
+            name = random.choice(possible_names)
+            print("Test {0}: Added User {1}".format(i+1, name))
+            user = create.addUser(name).get_json()
+            for _ in range(random.randint(5, 100)):
+                interest = random.choice(possible_interests)
+                level = random.randint(-10, 1000)
+                package = {
+                    'user': user['id'],
+                    'interest': {
+                        'name': interest,
+                        'level': level
+                    }
+                }
+                print("Test {0}: Added Interest {1} with Level {2}".format(i+1, interest, level))
+                interests.add_interest(package)
+
+        print("Completed all tests! :)")
+
+def legacy_test():
     with main.app.app_context():
         #TODO ADD ACTUAL API TESTS NOT JUST FUNCTION TESTS
         # Test of Actual API for interests
@@ -98,8 +138,12 @@ def test():
 
         print("{0}/{1} Tests Passed".format(success, total))
 
+# Old Test Function
+#legacy_test()
+
+
 # Invoke of Tester
-test()
+test(1000)
 
 '''
 # Huge invoke test
