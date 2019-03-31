@@ -1,6 +1,7 @@
 import database
 from flask import jsonify
 from firebase_admin import firestore
+from time import time
 
 '''
 Args Stuff
@@ -17,6 +18,20 @@ def add_interest(args):
     Add User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
+
+    interest_db = database.db.collection(u'interests').document(args['interest']['name'])
+    interest_data = interest_db.get().to_dict()
+    # If already defined interest
+    try:
+        interest_data['users'][args['user']] = time()
+    except TypeError:
+        # Otherwise define and add user
+        interest_data = {
+            'users': {
+                args['user']:time()
+            }
+        }
+    interest_db.set(interest_data)
 
 
     data = doc_ref.get().to_dict()
@@ -44,12 +59,13 @@ def get_interest(args):
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
 
+
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
 
     package = {
         'interests': previous_interests,
-        'success':True
+        'success': True
     }
     return jsonify(package)
 
@@ -59,6 +75,24 @@ def remove_interest(args):
     Remove User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
+    interest_db = database.db.collection(u'interests').document(args['interest']['name'])
+    interest_data = interest_db.get().to_dict()
+    print(interest_data)
+    del interest_data['users'][args['user']]
+    print(interest_data)
+    interest_db.set(interest_data)
+    # If already defined interest
+    '''
+    try:
+        del interest_data['users'][args['user']]
+    except TypeError:
+        # Otherwise define and add user
+        interest_data = {
+            'users': {
+                args['user']:time()
+            }
+        }
+    '''
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
