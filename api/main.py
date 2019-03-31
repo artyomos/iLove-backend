@@ -66,7 +66,6 @@ def create_user(requests):
 
 # All Interest Actions
 
-
 @app.route("/api/user/interests")
 def interests_api(requests):
     if requests:
