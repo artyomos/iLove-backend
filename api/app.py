@@ -3,30 +3,43 @@ from user import create, interests
 
 # Flask App
 from flask import Flask
+
+import asyncio
+
 app = Flask(__name__)
 
-#TODO Remove/Update this
+# TODO Remove/Update this
 # Temporary Exceptions
+
+
 class NoInput(Exception):
     pass
+
+
 class BadInput(Exception):
     pass
 
 ### PAGE CALLS ###
 
-#TODO (Maybe - Relies on React-Native front-end)
+# TODO (Maybe - Relies on React-Native front-end)
 
 # Main Page Directory
+
+
 @app.route("/")
 def main_page():
     return 'Hewwo! ^w^'
 
 # Login Page
+
+
 @app.route("/login")
 def login_page():
     pass
 
 # User Pages
+
+
 @app.route("/user/<user_id>")
 def show_user(user_id):
     pass
@@ -34,6 +47,8 @@ def show_user(user_id):
 ### API CALLS ###
 
 # Create User
+
+
 @app.route("/api/user/create")
 def create_user(requests):
     if requests:
@@ -43,13 +58,15 @@ def create_user(requests):
             if name:
                 return create.addUser()
             else:
-                #TODO make status code response instead
+                # TODO make status code response instead
                 raise NoInput("Name was Empty in Request")
     else:
-        #TODO make status code response instead
+        # TODO make status code response instead
         raise NoInput("Header was Empty in Request")
 
 # All Interest Actions
+
+
 @app.route("/api/user/interests")
 def interests_api(requests):
     if requests:
@@ -58,8 +75,8 @@ def interests_api(requests):
             type = json['type']
             try:
                 arguments = {
-                    'user' :json['id'],
-                    'interest' :json['interest']
+                    'user': json['id'],
+                    'interest': json['interest']
                 }
                 if type == 'add':
                     return interests.add_interest(arguments)
@@ -68,11 +85,11 @@ def interests_api(requests):
                 elif type == 'get':
                     return interests.get_interest(arguments)
             except KeyError:
-                #TODO Return Specific invalid arguments status code
+                # TODO Return Specific invalid arguments status code
                 raise BadInput("Arguments were not given properly")
             else:
-                #TODO make status code response instead
+                # TODO make status code response instead
                 raise NoInput("Name was Empty in Request")
     else:
-        #TODO make status code response instead
+        # TODO make status code response instead
         raise NoInput("Header was Empty in Request")

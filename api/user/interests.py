@@ -13,13 +13,16 @@ args = {
     }
 }
 '''
+
+
 def add_interest(args):
     """
     Add User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
 
-    interest_db = database.db.collection(u'interests').document(args['interest']['name'])
+    interest_db = database.db.collection(
+        u'interests').document(args['interest']['name'])
     interest_data = interest_db.get().to_dict()
     # If already defined interest
     try:
@@ -28,7 +31,7 @@ def add_interest(args):
         # Otherwise define and add user
         interest_data = {
             'users': {
-                args['user']:time()
+                args['user']: time()
             }
         }
 
@@ -36,32 +39,33 @@ def add_interest(args):
     interest_data['total_users'] = len(interest_data['users'])
     interest_db.set(interest_data)
 
-
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
-    if database.DEBUG: print("DEBUG: Previous Interests are {0}".format(previous_interests))
+    if database.DEBUG:
+        print("DEBUG: Previous Interests are {0}".format(previous_interests))
 
     # Add new interest
-    #TODO Add values/specifics
+    # TODO Add values/specifics
     previous_interests[args['interest']['name']] = args['interest']['level']
 
     doc_ref.set(data)
 
-    if database.DEBUG: print("DEBUG: New Interests are {0}".format(previous_interests))
+    if database.DEBUG:
+        print("DEBUG: New Interests are {0}".format(previous_interests))
 
     # If reached this point, all was successful
     package = {
         'interests': previous_interests,
-        'success':True
+        'success': True
     }
     return jsonify(package)
+
 
 def get_interest(args):
     """
     Return User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
-
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
@@ -78,7 +82,8 @@ def remove_interest(args):
     Remove User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
-    interest_db = database.db.collection(u'interests').document(args['interest']['name'])
+    interest_db = database.db.collection(
+        u'interests').document(args['interest']['name'])
     interest_data = interest_db.get().to_dict()
     try:
         del interest_data['users'][args['user']]
@@ -93,18 +98,20 @@ def remove_interest(args):
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
-    if database.DEBUG: print("DEBUG: Previous Interests are {0}".format(previous_interests))
+    if database.DEBUG:
+        print("DEBUG: Previous Interests are {0}".format(previous_interests))
 
     # Remove Interest
     del previous_interests[args['interest']['name']]
 
     doc_ref.update(data)
 
-    if database.DEBUG: print("DEBUG: New Interests are {0}".format(previous_interests))
+    if database.DEBUG:
+        print("DEBUG: New Interests are {0}".format(previous_interests))
 
     # If reached this point, all was successful
     package = {
         'interests': previous_interests,
-        'success':True
+        'success': True
     }
     return jsonify(package)
