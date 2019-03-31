@@ -18,12 +18,12 @@ class BadInput(Exception):
 
 # Main Page Directory
 @app.route("/")
-def hewwo():
+def main_page():
     return 'Hewwo! ^w^'
 
 # Login Page
 @app.route("/login")
-def login():
+def login_page():
     pass
 
 # User Pages
@@ -41,7 +41,6 @@ def create_user(requests):
         if 'name' in json:
             name = json['name']
             if name:
-                print("DEBUG: Processing Request")
                 return create.addUser()
             else:
                 #TODO make status code response instead
@@ -50,30 +49,27 @@ def create_user(requests):
         #TODO make status code response instead
         raise NoInput("Header was Empty in Request")
 
-# Post Interest OR Remove Interest
+# All Interest Actions
 @app.route("/api/user/interests")
 def interests_api(requests):
     if requests:
         json = requests.get_json()
-        if 'type' in json:
+        if 'type' in json and json['type']:
             type = json['type']
-            if type:
-                try:
-                    arguments = {
-                        'user' :json['id'],
-                        'interest' :json['interest']
-                    }
-                    if type == 'add':
-                        return interests.add_interest(arguments)
-                    elif type == 'remove':
-                        return interests.remove_interest(arguments)
-                    elif type == 'get':
-                        return interests.get_interest(arguments)
-
-                    print("DEBUG: Processing Request")
-                except KeyError:
-                    #TODO Return Specific invalid arguments status code
-                    raise BadInput("Arguments were not given properly")
+            try:
+                arguments = {
+                    'user' :json['id'],
+                    'interest' :json['interest']
+                }
+                if type == 'add':
+                    return interests.add_interest(arguments)
+                elif type == 'remove':
+                    return interests.remove_interest(arguments)
+                elif type == 'get':
+                    return interests.get_interest(arguments)
+            except KeyError:
+                #TODO Return Specific invalid arguments status code
+                raise BadInput("Arguments were not given properly")
             else:
                 #TODO make status code response instead
                 raise NoInput("Name was Empty in Request")
