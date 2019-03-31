@@ -67,7 +67,7 @@ def test(max_tests=0):
                         'level': level
                     }
                 }
-                print("Test {0}: Added Interest {1} with Level {2}".format(i+1, interest, level))
+                print("Test {0}: Added Interest {1} with Interest Level {2}".format(i+1, interest, level))
                 interests.add_interest(package)
 
         print("Completed all tests! :)")
