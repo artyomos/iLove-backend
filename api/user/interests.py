@@ -31,6 +31,9 @@ def add_interest(args):
                 args['user']:time()
             }
         }
+
+    # Update size of total_users
+    interest_data['total_users'] = len(interest_data['users'])
     interest_db.set(interest_data)
 
 
@@ -77,22 +80,16 @@ def remove_interest(args):
     doc_ref = database.db.collection(u'users').document(args['user'])
     interest_db = database.db.collection(u'interests').document(args['interest']['name'])
     interest_data = interest_db.get().to_dict()
-    print(interest_data)
-    del interest_data['users'][args['user']]
-    print(interest_data)
-    interest_db.set(interest_data)
-    # If already defined interest
-    '''
     try:
         del interest_data['users'][args['user']]
-    except TypeError:
-        # Otherwise define and add user
-        interest_data = {
-            'users': {
-                args['user']:time()
-            }
-        }
-    '''
+    except KeyError:
+        # If user doesn't exists in that interest don't worry about it
+        print("Warning: User was not in this interest - Possible Client-side Error")
+        pass
+
+    # Update size of total_users
+    interest_data['total_users'] = len(interest_data['users'])
+    interest_db.set(interest_data)
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
