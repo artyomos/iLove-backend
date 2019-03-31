@@ -72,7 +72,7 @@ def api_test():
 
         print("All Functions Tests Completed (Check for Passing)")
 
-api_test()
+# api_test()
 
 # Note: Run Old_Test for verifiable results
 def test(max_tests=0):
@@ -173,10 +173,4 @@ def legacy_test():
 
 
 # Invoke of Tester
-#test(1000)
-
-'''
-# Huge invoke test
-for _ in range(100):
-    test()
-'''
+test(1000)
