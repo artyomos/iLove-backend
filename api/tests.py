@@ -33,6 +33,16 @@ def increment(result):
 
 ### Flask Testing Function ###
 
+# Test of total_interests
+def function_test():
+    with main.app.app_context():
+        data = {
+            'limit':100
+        }
+        print(main.total_interests(jsonify(data)).get_json())
+
+# function_test()
+
 # Note: Run Old_Test for verifiable results
 def test(max_tests=0):
     with main.app.app_context():
@@ -143,7 +153,7 @@ def legacy_test():
 
 
 # Invoke of Tester
-test(1000)
+#test(1000)
 
 '''
 # Huge invoke test

@@ -119,16 +119,13 @@ def remove_interest(args):
 def get_popular(number):
     interest_db = database.db.collection(
         u'interests').order_by(u'total_users', direction=firestore.Query.DESCENDING).limit(number).get()
-    interest_data = [{d.id:d.to_dict()} for d in interest_db]
 
     # Functions to sort data
+    interest_data = [{d.id:d.to_dict()} for d in interest_db]
     for datapoint in interest_data:
         for key in datapoint.keys():
             del datapoint[key]['users']
-
-    return interest_data
-
-print(get_popular(10))
+    return jsonify(interest_data)
 
 def get_user_popular(args):
     pass
