@@ -1,9 +1,9 @@
 # Main Application File
-import app as main
+import main
 
 # Functions Needed to be Tested
 from user import create, interests
-
+from flask import jsonify
 
 def check_value(test_name, expected_value, received_value):
     try:
@@ -34,6 +34,16 @@ def increment(result):
 
 def test():
     with main.app.app_context():
+        #TODO ADD ACTUAL API TESTS NOT JUST FUNCTION TESTS
+        # Test of Actual API for interests
+        main.interests_api(jsonify({
+        "id":"053WhOjBlFJ4L47Hps47",
+        "type": "add",
+        "interest": {
+          "name":"PETA",
+          "level":-10000
+          }
+        }))
 
         user = create.addUser("Anubis").get_json()
 
@@ -88,11 +98,11 @@ def test():
 
         print("{0}/{1} Tests Passed".format(success, total))
 
-
 # Invoke of Tester
 test()
 
-
+'''
 # Huge invoke test
 for _ in range(100):
     test()
+'''
