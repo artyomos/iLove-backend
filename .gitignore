@@ -1,3 +1,4 @@
 *.json
 flag.txt
 *.pyc
+*.zip
