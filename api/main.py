@@ -92,3 +92,21 @@ def interests_api(requests):
     else:
         # TODO make status code response instead
         raise NoInput("Header was Empty in Request")
+
+@app.route("/api/interests")
+def total_interests(requests):
+    if requests:
+        json = requests.get_json()
+        if 'limit' in json and json['limit']:
+            try:
+                limit = json['limit']
+                return interests.get_popular(limit)
+            except KeyError:
+                # TODO Return Specific invalid arguments status code
+                raise BadInput("Arguments were not given properly")
+            else:
+                # TODO make status code response instead
+                raise NoInput("Name was Empty in Request")
+    else:
+        # TODO make status code response instead
+        raise NoInput("Header was Empty in Request")
