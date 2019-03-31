@@ -67,6 +67,9 @@ def interests_api(requests):
                         return interests.add_interest(arguments)
                     elif type == 'remove':
                         return interests.remove_interest(arguments)
+                    elif type == 'get':
+                        return interests.get_interest(arguments)
+
                     print("DEBUG: Processing Request")
                 except KeyError:
                     #TODO Return Specific invalid arguments status code

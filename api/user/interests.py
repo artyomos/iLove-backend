@@ -18,8 +18,6 @@ def add_interest(args):
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
 
-    # Ensure proper ID was grabbed
-    assert(doc_ref.id == args['user'])
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
@@ -40,14 +38,27 @@ def add_interest(args):
     }
     return jsonify(package)
 
+def get_interest(args):
+    """
+    Return User Interest
+    """
+    doc_ref = database.db.collection(u'users').document(args['user'])
+
+    data = doc_ref.get().to_dict()
+    previous_interests = data['user_likes']
+
+    package = {
+        'interests': previous_interests,
+        'success':True
+    }
+    return jsonify(package)
+
+
 def remove_interest(args):
     """
     Remove User Interest
     """
     doc_ref = database.db.collection(u'users').document(args['user'])
-
-    # Ensure proper ID was grabbed
-    assert(doc_ref.id == args['user'])
 
     data = doc_ref.get().to_dict()
     previous_interests = data['user_likes']
