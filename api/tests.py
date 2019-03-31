@@ -80,3 +80,9 @@ def test():
 
 # Invoke of Tester
 test()
+
+'''
+#Huge invoke test
+for _ in range(100):
+    test()
+'''
