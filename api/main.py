@@ -56,7 +56,7 @@ def create_user(requests):
         if 'name' in json:
             name = json['name']
             if name:
-                return create.addUser()
+                return create.addUser(name)
             else:
                 # TODO make status code response instead
                 raise NoInput("Name was Empty in Request")

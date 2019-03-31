@@ -33,15 +33,46 @@ def increment(result):
 
 ### Flask Testing Function ###
 
-# Test of total_interests
-def function_test():
+# Test of api (actual http request) functions
+def api_test():
     with main.app.app_context():
+        # Test of Total_Interests Function
         data = {
-            'limit':100
+            'limit':3
         }
-        print(main.total_interests(jsonify(data)).get_json())
+        print('Test of Total_Interests: {0}'.format(main.total_interests(jsonify(data)).get_json()))
 
-# function_test()
+        ### Test of API versions of Test
+
+        # Test of User Register
+        data = {
+            'name':'Test User'
+        }
+
+        user = main.create_user(jsonify(data)).get_json()
+        print('Test of User API: {0}'.format(user))
+
+        # Test of Interest API
+        data = {
+        "id":user['id'],
+        "type": "add",
+        "interest": {
+          "name":"Riolu",
+          "level":100
+          }
+        }
+        # Test of ADD Interests API
+        print('Test of Add Interest: {0}'.format(main.interests_api(jsonify(data)).get_json()))
+        # Test of GET Interests API
+        data['type'] = 'get'
+        print('Test of Get Interest: {0}'.format(main.interests_api(jsonify(data)).get_json()))
+        # Test of REMOVE Interests API
+        data['type'] = 'remove'
+        print('Test of Remove Interest: {0}'.format(main.interests_api(jsonify(data)).get_json()))
+
+        print("All Functions Tests Completed (Check for Passing)")
+
+api_test()
 
 # Note: Run Old_Test for verifiable results
 def test(max_tests=0):
@@ -84,17 +115,6 @@ def test(max_tests=0):
 
 def legacy_test():
     with main.app.app_context():
-        #TODO ADD ACTUAL API TESTS NOT JUST FUNCTION TESTS
-        # Test of Actual API for interests
-        main.interests_api(jsonify({
-        "id":"053WhOjBlFJ4L47Hps47",
-        "type": "add",
-        "interest": {
-          "name":"PETA",
-          "level":-10000
-          }
-        }))
-
         user = create.addUser("Anubis").get_json()
 
         # Make sure correct value is received
